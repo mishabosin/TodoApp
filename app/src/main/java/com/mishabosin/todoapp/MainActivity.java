@@ -1,6 +1,7 @@
 package com.mishabosin.todoapp;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -68,9 +69,18 @@ public class MainActivity extends AppCompatActivity {
         lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapter, View item, int pos, long id) {
+                final String taskText = items.get(pos);
                 items.remove(pos);
                 itemsAdapter.notifyDataSetChanged();
                 fileStorage.writeItems(items);
+
+                Snackbar.make(item, "Task completed!", Snackbar.LENGTH_LONG)
+                        .setAction("Undo", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                addTask(taskText);
+                            }
+                        }).show();
                 return true;
             }
         });
@@ -79,8 +89,12 @@ public class MainActivity extends AppCompatActivity {
     public void onAddItem(View v) {
         EditText etNewItem = (EditText)findViewById(R.id.etNewItem);
         String itemText = etNewItem.getText().toString();
-        itemsAdapter.add(itemText);
-        fileStorage.writeItems(items);
+        addTask(itemText);
         etNewItem.setText("");
+    }
+
+    private void addTask(String taskText) {
+        itemsAdapter.add(taskText);
+        fileStorage.writeItems(items);
     }
 }
