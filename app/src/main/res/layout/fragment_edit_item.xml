@@ -1,0 +1,21 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/edit_item"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:layout_gravity="center" android:orientation="vertical"
+    android:padding="20dp">
+
+    <EditText
+        android:layout_width="303dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/etEditItem"
+        android:hint="@string/new_item_hint" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_item"
+        android:id="@+id/btnAddItem"
+        android:layout_marginBottom="46dp"
+        android:layout_gravity="end" />
+
+</LinearLayout>

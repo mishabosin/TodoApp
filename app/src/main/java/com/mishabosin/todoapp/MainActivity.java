@@ -1,7 +1,9 @@
 package com.mishabosin.todoapp;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -9,12 +11,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EditItemDialog.EditItemDialogListener {
     ArrayList<String> items;
     ArrayAdapter<String> itemsAdapter;
     ListView lvItems;
@@ -33,14 +34,13 @@ public class MainActivity extends AppCompatActivity {
         itemsAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
         setupListViewListener();
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showTaskDialog("New task");
+            }
+        });
     }
 
     @Override
@@ -65,6 +65,17 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onFinishEditDialog(String itemText) {
+        addTask(itemText);
+    }
+
+    private void showTaskDialog(String title) {
+        FragmentManager fm = getSupportFragmentManager();
+        EditItemDialog editNameDialog = EditItemDialog.newInstance(title);
+        editNameDialog.show(fm, "fragment_edit_item");
+    }
+
     private void setupListViewListener() {
         lvItems.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -84,13 +95,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-    }
-
-    public void onAddItem(View v) {
-        EditText etNewItem = (EditText)findViewById(R.id.etNewItem);
-        String itemText = etNewItem.getText().toString();
-        addTask(itemText);
-        etNewItem.setText("");
     }
 
     private void addTask(String taskText) {
