@@ -14,18 +14,32 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class EditItemDialog extends DialogFragment implements TextView.OnEditorActionListener {
+    private static final String PARAM_TITLE = "title";
+    private static final String PARAM_POS = "pos";
+    private static final String PARAM_TEXT = "taskText";
     private EditText mEditText;
 
     public interface EditItemDialogListener {
-        void onFinishEditDialog(String inputText);
+        void onFinishNewDialog(String inputText);
+        void onFinishEditDialog(int pos, String inputText, String originalText);
     }
 
     public EditItemDialog() {}
 
-    public static EditItemDialog newInstance(String title) {
+    public static EditItemDialog newTaskInstance() {
         EditItemDialog frag = new EditItemDialog();
         Bundle args = new Bundle();
-        args.putString("title", title);
+        args.putString(PARAM_TITLE, "New task");
+        frag.setArguments(args);
+        return frag;
+    }
+
+    public static EditItemDialog newEditTaskInstance(int pos, String taskText) {
+        EditItemDialog frag = new EditItemDialog();
+        Bundle args = new Bundle();
+        args.putString(PARAM_TITLE, "Edit task");
+        args.putInt(PARAM_POS, pos);
+        args.putString(PARAM_TEXT, taskText);
         frag.setArguments(args);
         return frag;
     }
@@ -39,6 +53,10 @@ public class EditItemDialog extends DialogFragment implements TextView.OnEditorA
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        String title = getArguments().getString(PARAM_TITLE, "Todo task");
+        getDialog().setTitle(title);
+
+        // Submit button
         Button btnAddTask = (Button) view.findViewById(R.id.btnAddItem);
         btnAddTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,11 +64,11 @@ public class EditItemDialog extends DialogFragment implements TextView.OnEditorA
                 returnInputToActivity();
             }
         });
+
         // Get field from view
         mEditText = (EditText) view.findViewById(R.id.etEditItem);
-        // Fetch arguments from bundle and set title
-        String title = getArguments().getString("title", "Enter Name");
-        getDialog().setTitle(title);
+        String taskText = getArguments().getString(PARAM_TEXT, "");
+        mEditText.setText(taskText);
         // Show soft keyboard automatically and request focus to field
         mEditText.requestFocus();
         getDialog().getWindow().setSoftInputMode(
@@ -71,7 +89,18 @@ public class EditItemDialog extends DialogFragment implements TextView.OnEditorA
 
     private void returnInputToActivity() {
         EditItemDialogListener listener = (EditItemDialogListener) getActivity();
-        listener.onFinishEditDialog(mEditText.getText().toString());
+        String taskText = mEditText.getText().toString().trim();
+        // ignore blank input
+        if (taskText.equals("")) {
+            dismiss();
+            return;
+        }
+        int pos = getArguments().getInt(PARAM_POS, -1);
+        if (pos == -1) {
+            listener.onFinishNewDialog(taskText);
+        } else {
+            listener.onFinishEditDialog(pos, taskText, getArguments().getString(PARAM_TEXT, ""));
+        }
         dismiss();
     }
 }

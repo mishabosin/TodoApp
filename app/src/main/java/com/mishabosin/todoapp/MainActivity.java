@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements EditItemDialog.Ed
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showTaskDialog("New task");
+                showNewTaskDialog();
             }
         });
     }
@@ -66,13 +66,31 @@ public class MainActivity extends AppCompatActivity implements EditItemDialog.Ed
     }
 
     @Override
-    public void onFinishEditDialog(String itemText) {
+    public void onFinishNewDialog(String itemText) {
         addTask(itemText);
     }
 
-    private void showTaskDialog(String title) {
+    @Override
+    public void onFinishEditDialog(final int pos, String taskText, final String originalText) {
+        updateTask(pos, taskText);
+        Snackbar.make(lvItems, "Task updated", Snackbar.LENGTH_LONG)
+                .setAction(R.string.undo, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        updateTask(pos, originalText);
+                    }
+                }).show();
+    }
+
+    private void showNewTaskDialog() {
         FragmentManager fm = getSupportFragmentManager();
-        EditItemDialog editNameDialog = EditItemDialog.newInstance(title);
+        EditItemDialog editNameDialog = EditItemDialog.newTaskInstance();
+        editNameDialog.show(fm, "fragment_edit_item");
+    }
+
+    private void showEditTaskDialog(int pos, String taskText) {
+        FragmentManager fm = getSupportFragmentManager();
+        EditItemDialog editNameDialog = EditItemDialog.newEditTaskInstance(pos, taskText);
         editNameDialog.show(fm, "fragment_edit_item");
     }
 
@@ -85,8 +103,8 @@ public class MainActivity extends AppCompatActivity implements EditItemDialog.Ed
                 itemsAdapter.notifyDataSetChanged();
                 fileStorage.writeItems(items);
 
-                Snackbar.make(item, "Task completed!", Snackbar.LENGTH_LONG)
-                        .setAction("Undo", new View.OnClickListener() {
+                Snackbar.make(lvItems, "Task completed!", Snackbar.LENGTH_LONG)
+                        .setAction(R.string.undo, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 addTask(taskText);
@@ -95,10 +113,23 @@ public class MainActivity extends AppCompatActivity implements EditItemDialog.Ed
                 return true;
             }
         });
+        lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapter, View item, int pos, long id) {
+                final String taskText = items.get(pos);
+                showEditTaskDialog(pos, taskText);
+            }
+        });
     }
 
     private void addTask(String taskText) {
         itemsAdapter.add(taskText);
+        fileStorage.writeItems(items);
+    }
+
+    private void updateTask(int pos, String taskText) {
+        items.set(pos, taskText);
+        itemsAdapter.notifyDataSetChanged();
         fileStorage.writeItems(items);
     }
 }
