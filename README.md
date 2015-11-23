@@ -1,30 +1,60 @@
-# TodoApp
+# Pre-work - TodoApp
 
+**TodoApp** is an android app that allows building a todo list and basic todo items management functionality including adding new items, editing and deleting an existing item.
 This Android application is built for basic familiarity with Android and its development 
 environment.
 
-Time spent: Around 8 hours in total (including setting up the requirement)
+Submitted by: **Misha Bosin**
 
-Completed user stories:
- * [x] Required: Can you successfully add and remove items from the todo list within your app?
- * [x] Required: Did you include support for editing todo items as described above?
- * [x] Required: Does your app persist todo items and retrieve them properly on app restart?
- * [x] Required: Did you successfully push your code to github? Can you see the code on github?
- * [x] Required: Did you add a README which includes a GIF walkthrough of the app's functionality?
- * [x] Suggested: Use a DialogFragment instead of new Activity for editing items
- * [ ] Suggested: Persist the todo items into SQLite instead of a text file
+Time spent: **10** hours spent in total (including setting up the requirement)
 
-Notes:
-* Added an "add task" feature that uses a FloatingActionButton
-* Added an undo feature for create/edit/remove using the Snackbar.
-* Figure out how R.string.<value> works. How to get a string out of the int value?
+## User Stories
 
-TODO:
-* Got kind of messy using both "item" and "task" interchangeably - need to refactor all "items" into "tasks"
-* Implement SQL lite storage and use the settings widget to switch between storage options.
+The following **required** functionality is completed:
 
-Walkthrough of all user stories:
+* [x] User can **successfully add and remove items** from the todo list
+* [x] User can **tap a todo item in the list and bring up an edit screen for the todo item** and then have any changes to the text reflected in the todo list.
+* [x] User can **persist todo items** and retrieve them properly on app restart
 
-![Video Walkthrough](todo_in_action.gif)
+The following **optional** features are implemented:
+
+* [ ] Persist the todo items [into SQLite](http://guides.codepath.com/android/Persisting-Data-to-the-Device#sqlite) instead of a text file
+* [ ] Improve style of the todo items in the list [using a custom adapter](http://guides.codepath.com/android/Using-an-ArrayAdapter-with-ListView)
+* [ ] Add support for completion due dates for todo items (and display within listview item)
+* [x] Use a [DialogFragment](http://guides.codepath.com/android/Using-DialogFragment) instead of new Activity for editing items
+* [ ] Add support for selecting the priority of each todo item (and display in listview item)
+* [ ] Tweak the style improving the UI / UX, play with colors, images or backgrounds
+
+The following **additional** features are implemented:
+
+* [x] Undo functionality is supported for all actions using a Snackbar feature
+* [x] Using FloatingActionButton to view a the task text edit modal
+
+## Video Walkthrough 
+
+Here's a walkthrough of implemented user stories:
+
+<img src='http://i.imgsafe.org/471e4bf.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
+
+## Notes
+
+* Figure out how R.string.<value> works. How to get a string out of the int value?
+* Got kind of messy using both "item" and "task" interchangeably - need to refactor all "items" into "tasks"
+
+## License
+
+    Copyright 2015 Misha Bosin
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
