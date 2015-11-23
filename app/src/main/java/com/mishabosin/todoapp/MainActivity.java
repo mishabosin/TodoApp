@@ -68,12 +68,19 @@ public class MainActivity extends AppCompatActivity implements EditItemDialog.Ed
     @Override
     public void onFinishNewDialog(String itemText) {
         addTask(itemText);
+        Snackbar.make(lvItems, R.string.task_updated, Snackbar.LENGTH_LONG)
+                .setAction(R.string.undo, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        removeTask(items.size() - 1);
+                    }
+                }).show();
     }
 
     @Override
     public void onFinishEditDialog(final int pos, String taskText, final String originalText) {
         updateTask(pos, taskText);
-        Snackbar.make(lvItems, "Task updated", Snackbar.LENGTH_LONG)
+        Snackbar.make(lvItems, R.string.task_updated, Snackbar.LENGTH_LONG)
                 .setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -99,11 +106,9 @@ public class MainActivity extends AppCompatActivity implements EditItemDialog.Ed
             @Override
             public boolean onItemLongClick(AdapterView<?> adapter, View item, int pos, long id) {
                 final String taskText = items.get(pos);
-                items.remove(pos);
-                itemsAdapter.notifyDataSetChanged();
-                fileStorage.writeItems(items);
+                removeTask(pos);
 
-                Snackbar.make(lvItems, "Task completed!", Snackbar.LENGTH_LONG)
+                Snackbar.make(lvItems, R.string.task_completed, Snackbar.LENGTH_LONG)
                         .setAction(R.string.undo, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -129,6 +134,12 @@ public class MainActivity extends AppCompatActivity implements EditItemDialog.Ed
 
     private void updateTask(int pos, String taskText) {
         items.set(pos, taskText);
+        itemsAdapter.notifyDataSetChanged();
+        fileStorage.writeItems(items);
+    }
+
+    private void removeTask(int pos) {
+        items.remove(pos);
         itemsAdapter.notifyDataSetChanged();
         fileStorage.writeItems(items);
     }

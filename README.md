@@ -10,12 +10,18 @@ Completed user stories:
  * [x] Required: Did you include support for editing todo items as described above?
  * [x] Required: Does your app persist todo items and retrieve them properly on app restart?
  * [x] Required: Did you successfully push your code to github? Can you see the code on github?
- * [ ] Required: Did you add a README which includes a GIF walkthrough of the app's functionality?
- * [ ] Required: Did you create an issue on the repo and include /cc @codepathreview @codepath in the issue body?
+ * [x] Required: Did you add a README which includes a GIF walkthrough of the app's functionality?
+ * [x] Suggested: Use a DialogFragment instead of new Activity for editing items
+ * [ ] Suggested: Persist the todo items into SQLite instead of a text file
 
 Notes:
-Added an "add task" feature that uses a FloatingActionButton
-Added an undo feature for create/edit using the Snackbar.
+* Added an "add task" feature that uses a FloatingActionButton
+* Added an undo feature for create/edit/remove using the Snackbar.
+* Figure out how R.string.<value> works. How to get a string out of the int value?
+
+TODO:
+* Got kind of messy using both "item" and "task" interchangeably - need to refactor all "items" into "tasks"
+* Implement SQL lite storage and use the settings widget to switch between storage options.
 
 Walkthrough of all user stories:
 
